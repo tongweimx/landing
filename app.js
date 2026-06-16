@@ -66,10 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
             header.classList.remove('scrolled');
         }
 
-        if (window.scrollY > 500) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
+        if (scrollTopBtn) {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
         }
     });
 
