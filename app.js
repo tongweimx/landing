@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Google Sheets Integration Configuration
     // REPLACE THIS URL WITH YOUR ACTUAL DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
-    const googleSheetsUrl = ''; 
+    const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbxaTz2glGD2uu59K93VIYqbzNtyO1i6zAraG6srG-Kb9XvxIY5H5NRoDqMWbvAr5YkD/exec'; 
 
     // UTM Tracking Initialization
     function initUtmTracking() {
