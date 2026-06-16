@@ -1,5 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Google Sheets Integration Configuration
+    // REPLACE THIS URL WITH YOUR ACTUAL DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+    const googleSheetsUrl = ''; 
+
+    // UTM Tracking Initialization
+    function initUtmTracking() {
+        const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'];
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        utmKeys.forEach(key => {
+            const val = urlParams.get(key);
+            if (val) {
+                sessionStorage.setItem(key, val);
+            }
+        });
+    }
+    initUtmTracking();
+
+    function getSavedUtmParams() {
+        const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'];
+        const params = {};
+        utmKeys.forEach(key => {
+            params[key] = sessionStorage.getItem(key) || '';
+        });
+        return params;
+    }
+
+    // Send Lead to Google Sheets
+    function sendLeadToGoogleSheets(leadData) {
+        if (!googleSheetsUrl) {
+            console.warn('Google Sheets Web App URL is not configured. Lead not saved to sheet.');
+            return Promise.resolve(false);
+        }
+        
+        const utmParams = getSavedUtmParams();
+        const payload = {
+            ...leadData,
+            ...utmParams,
+            url: window.location.href,
+            timestamp: new Date().toLocaleString('es-MX')
+        };
+        
+        return fetch(googleSheetsUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
+            keepalive: true
+        }).catch(err => {
+            console.error('Error sending lead to Google Sheets:', err);
+        });
+    }
+
     // 1. Header Scroll Class & Back to Top Button
     const header = document.getElementById('header');
     const scrollTopBtn = document.getElementById('scrollTop');
@@ -283,6 +338,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const projectType = document.getElementById('projectType').value;
             const message = document.getElementById('message').value;
 
+            // Send lead data to Google Sheets in background
+            sendLeadToGoogleSheets({
+                type: 'Formulario de Contacto (Cotizar)',
+                name: name,
+                phone: phone,
+                email: email,
+                details: `Recibo CFE: $${cfeBill} MXN, Num Servicio CFE: ${cfeNumber}, Tipo Proyecto: ${projectType}, Comentarios: ${message}`
+            });
+
             // Formulate WhatsApp prefilled message
             const waLeadMsg = `Hola, mi nombre es ${name}. He enviado mis datos desde tongwei.mx para cotizar mi proyecto solar. ` +
                               `Detalles de mi solicitud:\n` +
@@ -428,5 +492,87 @@ document.addEventListener('DOMContentLoaded', () => {
     if (slides.length > 0) {
         startAutoplay();
     }
+
+    // 11. Request Call (Solicitar Llamada) Modal & Forms handler
+    const callModal = document.getElementById('callModal');
+    const callForm = document.getElementById('callForm');
+    const callSuccessMsg = document.getElementById('callSuccessMsg');
+    const callModalClose = document.getElementById('callModalClose');
+    const callModalTriggers = document.querySelectorAll('.call-modal-trigger');
+
+    if (callModal && callModalTriggers.length > 0) {
+        callModalTriggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (callForm) callForm.style.display = 'flex';
+                if (callSuccessMsg) callSuccessMsg.style.display = 'none';
+                if (callForm) callForm.reset();
+                callModal.classList.add('active');
+            });
+        });
+
+        if (callModalClose) {
+            callModalClose.addEventListener('click', () => {
+                callModal.classList.remove('active');
+            });
+        }
+
+        callModal.addEventListener('click', (e) => {
+            if (e.target === callModal) {
+                callModal.classList.remove('active');
+            }
+        });
+    }
+
+    if (callForm) {
+        callForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const callName = document.getElementById('callName').value;
+            const callPhone = document.getElementById('callPhone').value;
+
+            // Disable submit button during fetch
+            const submitBtn = document.getElementById('callSubmitBtn');
+            if (submitBtn) submitBtn.disabled = true;
+
+            sendLeadToGoogleSheets({
+                type: 'Solicitud de Llamada',
+                name: callName || 'No especificado',
+                phone: callPhone,
+                email: '',
+                details: 'El usuario solicitó una llamada telefónica gratuita de un asesor.'
+            }).finally(() => {
+                if (submitBtn) submitBtn.disabled = false;
+                if (callForm) callForm.style.display = 'none';
+                if (callSuccessMsg) callSuccessMsg.style.display = 'block';
+                
+                // Automatically close modal after 3 seconds
+                setTimeout(() => {
+                    callModal.classList.remove('active');
+                }, 3000);
+            });
+        });
+    }
+
+    // 12. Track all clicks on WhatsApp links
+    function bindWhatsAppClickTracking() {
+        document.querySelectorAll('a').forEach(link => {
+            const href = link.getAttribute('href') || '';
+            if (href.includes('wa.me')) {
+                link.addEventListener('click', () => {
+                    const btnText = link.innerText.trim() || link.getAttribute('title') || 'Botón WhatsApp';
+                    sendLeadToGoogleSheets({
+                        type: 'Clic en WhatsApp',
+                        name: 'Visitante Anónimo',
+                        phone: '',
+                        email: '',
+                        details: `Botón: "${btnText}", URL de destino: ${href}`
+                    });
+                });
+            }
+        });
+    }
+    
+    // Bind after DOM is stable
+    setTimeout(bindWhatsAppClickTracking, 1000);
 
 });

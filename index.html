@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=7">
     
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,10 +24,9 @@
 
     <!-- Top Promo Banner (UTP Alerts) -->
     <div class="top-promo-banner">
-        <div class="promo-content">
-            <span>💥 <strong>OFERTA EXCLUSIVA:</strong> 50% - 70% de descuento en paneles + 30% en instalación</span>
-            <span class="divider">|</span>
-            <span>📋 Estudio de proyecto y visita de ingeniero <strong>100% GRATIS</strong></span>
+        <div class="banner-container">
+            <span>🔥 Promoción de Temporada: <strong>50% - 70% de descuento</strong> en paneles solares y <strong>30% en instalación</strong>.</span>
+            <span>📋 Estudio de proyecto y visita <strong>GRATIS</strong> | <a href="#" class="call-modal-trigger" style="color: var(--orange-primary); text-decoration: underline; font-weight: 700; margin-left: 5px;"><i class="fa-solid fa-phone"></i> Solicitar Llamada</a></span>
         </div>
     </div>
 
@@ -83,9 +82,10 @@
 
                 <div class="hero-actions">
                     <a href="https://wa.me/525512345678?text=Hola!%20Vengo%20de%20tongwei.mx%20y%20quiero%20calcular%20mi%20ahorro%20gratis%20con%20el%20descuento%20de%20temporada." class="btn-primary-wa" target="_blank">
-                        <i class="fa-brands fa-whatsapp"></i> Calcular Ahorro en WhatsApp (2 min)
+                        <i class="fa-brands fa-whatsapp"></i> Calcular en WhatsApp (2 min)
                     </a>
-                    <a href="#calculadora" class="btn-secondary">Simular Ahorro Local <i class="fa-solid fa-calculator"></i></a>
+                    <a href="#calculadora" class="btn-secondary">Simulador Local <i class="fa-solid fa-calculator"></i></a>
+                    <a href="#" class="btn-secondary call-modal-trigger"><i class="fa-solid fa-phone"></i> Solicitar Llamada</a>
                 </div>
             </div>
             
@@ -522,9 +522,18 @@
                         <i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp
                     </a>
                 </div>
+                
+                <!-- Packages CTA: Objections & Call Request -->
+                <div class="packages-cta reveal fade-up" style="margin-top: 50px; text-align: center; background: rgba(0, 82, 204, 0.04); padding: 30px; border-radius: 12px; border: 1px solid var(--border-light);">
+                    <h4 style="font-size: 20px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px;">¿No estás seguro de cuántos paneles necesitas?</h4>
+                    <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">Un ingeniero de Tongwei te ayuda a calcular la capacidad exacta de tu sistema analizando tu recibo CFE. La llamada y la asesoría técnica son 100% gratuitas.</p>
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <a href="#" class="btn-submit-modal call-modal-trigger" style="margin-top: 0; padding: 12px 24px; border-radius: 30px; background-color: var(--primary); box-shadow: 0 4px 15px rgba(0, 82, 204, 0.2);"><i class="fa-solid fa-phone"></i> Solicitar Asesoría Telefónica</a>
+                        <a href="https://wa.me/525512345678?text=Hola!%20Quiero%20asesoria%20sobre%20los%20paquetes%20de%20paneles%20solares%20que%20vi%20en%20tongwei.mx." class="btn-secondary" target="_blank" style="padding: 12px 24px; border-radius: 30px;"><i class="fa-brands fa-whatsapp"></i> Hablar por WhatsApp</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
     <!-- Section: CFE Interconnection and Bureaucracy -->
     <section id="interconexion" class="interconnection-section">
@@ -763,9 +772,13 @@
                         <p>De acuerdo con el Artículo 34, Fracción XIII de la Ley del Impuesto sobre la Renta (LISR) en México, los sistemas de generación de energía provenientes de fuentes renovables son depreciables al 100% en el primer año fiscal. Esto permite deducir la totalidad del costo del proyecto solar directamente de tu base gravable de ISR.</p>
                     </div>
                 </div>
+                
+                <div class="faq-cta" style="margin-top: 40px; text-align: center; border-top: 1px solid var(--border-light); padding-top: 30px;">
+                    <p style="font-size: 15.5px; color: var(--text-muted); margin-bottom: 15px;">¿Tienes alguna otra duda sobre los paneles solares o el proceso de interconexión con CFE?</p>
+                    <a href="#" class="btn-secondary call-modal-trigger" style="display: inline-flex; align-items: center; gap: 8px; border-radius: 30px; padding: 12px 24px;"><i class="fa-solid fa-phone"></i> Solicitar Llamada de un Asesor</a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
     <!-- Contact & Lead Form (CFE Service Number focus) -->
     <section id="contacto" class="contact-section">
@@ -884,7 +897,38 @@
             </div>
         </div>
     </div>
-
+    
+    <!-- Request Call Modal -->
+    <div class="cfe-modal-overlay" id="callModal">
+        <div class="cfe-modal-card">
+            <div class="cfe-modal-header">
+                <h3>Solicitar Llamada Gratis</h3>
+                <button class="cfe-modal-close" id="callModalClose"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="cfe-modal-body">
+                <p>Déjanos tus datos de contacto y un ingeniero especializado de Tongwei te llamará en menos de 15 minutos para resolver todas tus dudas, sin costo ni compromiso.</p>
+                <form id="callForm" class="modal-form">
+                    <div class="form-group">
+                        <label for="callName">Tu Nombre (Opcional)</label>
+                        <input type="text" id="callName" placeholder="Ej. Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label for="callPhone">Tu Teléfono (WhatsApp) *</label>
+                        <input type="tel" id="callPhone" required placeholder="Ej. 55 1234 5678">
+                    </div>
+                    <button type="submit" class="btn-submit-modal" id="callSubmitBtn">
+                        <i class="fa-solid fa-phone-volume"></i> Solicitar Llamada Gratis
+                    </button>
+                </form>
+                <div class="modal-success-msg" id="callSuccessMsg" style="display: none; text-align: center; padding: 20px 0;">
+                    <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--whatsapp-green); margin-bottom: 15px;"></i>
+                    <h4>¡Solicitud Recibida!</h4>
+                    <p>Un ingeniero te llamará muy pronto al número proporcionado. ¡Gracias!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Footer -->
     <footer>
         <div class="section-container footer-container">
@@ -942,6 +986,6 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=7"></script>
 </body>
 </html>
