@@ -2094,7 +2094,7 @@ footer {
 .slider-wrapper {
     position: relative;
     width: 100%;
-    height: 550px;
+    height: 650px;
     overflow: hidden;
 }
 
@@ -2286,7 +2286,7 @@ footer {
 /* Responsive slider styles */
 @media (max-width: 992px) {
     .slider-wrapper {
-        height: 480px;
+        height: 560px;
     }
     .slide-content h3 {
         font-size: 2.2rem;
@@ -2302,7 +2302,7 @@ footer {
 
 @media (max-width: 576px) {
     .slider-wrapper {
-        height: 420px;
+        height: 480px;
     }
     .slide-content {
         padding: 0 20px;
