@@ -2422,8 +2422,23 @@ footer {
 }
 
 .btn-submit-modal:hover {
-    background-color: var(--primary-light);
-    transform: translateY(-1px);
+    background-color: var(--primary-hover);
+    animation: btnSubmitPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes btnSubmitPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 94, 31, 0.6);
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03);
+        box-shadow: 0 0 0 8px rgba(255, 94, 31, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 94, 31, 0);
+        transform: scale(1);
+    }
 }
 
 .btn-submit-modal:active {
