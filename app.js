@@ -340,4 +340,93 @@ document.addEventListener('DOMContentLoaded', () => {
         revealElements.forEach(el => el.classList.add('visible'));
     }
 
+    // 10. Marketing Slider Section Logic
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+    const sliderWrapper = document.querySelector('.slider-wrapper');
+    let currentSlide = 0;
+    let autoplayInterval;
+
+    function showSlide(index) {
+        if (slides.length === 0) return;
+        slides.forEach(s => s.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('active'));
+        
+        currentSlide = (index + slides.length) % slides.length;
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
+
+    function startAutoplay() {
+        stopAutoplay();
+        autoplayInterval = setInterval(nextSlide, 6000); // Auto-advance every 6 seconds
+    }
+
+    function stopAutoplay() {
+        if (autoplayInterval) {
+            clearInterval(autoplayInterval);
+        }
+    }
+
+    if (prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            startAutoplay();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            startAutoplay();
+        });
+    }
+
+    dots.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            const slideIndex = parseInt(e.target.getAttribute('data-slide'));
+            showSlide(slideIndex);
+            startAutoplay();
+        });
+    });
+
+    // Touch Swipe Support for Mobile
+    let startX = 0;
+    let endX = 0;
+
+    if (sliderWrapper) {
+        sliderWrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            stopAutoplay();
+        }, { passive: true });
+
+        sliderWrapper.addEventListener('touchmove', (e) => {
+            endX = e.touches[0].clientX;
+        }, { passive: true });
+
+        sliderWrapper.addEventListener('touchend', () => {
+            const diffX = startX - endX;
+            if (Math.abs(diffX) > 50) { // minimum threshold of 50px
+                if (diffX > 0) {
+                    nextSlide(); // swipe left -> next
+                } else {
+                    prevSlide(); // swipe right -> prev
+                }
+            }
+            startAutoplay();
+        });
+    }
+
+    if (slides.length > 0) {
+        startAutoplay();
+    }
+
 });
